@@ -1,121 +1,77 @@
+// Module dependencies
+
 var fs = require('fs');
-var readline = require('readline');
 var io = require('socket.io');
 var http = require('http');
-
-var rl = readline.createInterface(process.stdin, process.stdout);
-var logStream = fs.createWriteStream('./logFile.log', {flags: 'a'});
-
+var readline = require('readline');
 var index = fs.readFileSync(__dirname + '/index.html');
-console.log(__dirname + '/index.html');
 
-var app = http.createServer(function(req, res) {
-    res.writeHead(200, {'Content-Type': 'text/html'});
-    res.end(index);
-});
-var socket = io().listen(app);
+module.exports = Screen;
 
-app.listen(3000);
+// Constructor
+function Screen(port){
+  	if (!(this instanceof Screen)) 
+  		return new Screen(port);
 
+  	port = port || 8888;
+	this.rl = readline.createInterface(process.stdin, process.stdout);
+	this.server = this.initServer(port);
+	this.socket = io().listen(this.server);
+  	this.resetConsole();
+	this.readStreams();
+	this.receiveSocket();
+	this.errorHandling();
+}
 
-rl.on('line', function(line){
-    console.log(line);
-    logStream.write(line);
- 	 socket.emit('line', line);
-})
+//Hijack console.log to send it to STDOUT
+Screen.prototype.resetConsole = function() {
+	var self = this;
+	console.log = function(m){
+	  	self.rl.write(m + "\n");
+	};
+	console.error = function(m){
+	 	self.rl.write(m + "\n");
+	};
+}
 
-process.on('uncaughtException', function (err) {
-  	console.error(err);
- 	socket.emit('line', err);
+Screen.prototype.initServer = function(port) {
+	var serv = http.createServer(function(req, res) {
+	    res.writeHead(200, {'Content-Type': 'text/html'});
+	    res.end(index);
+	});
 
- 	//Try to log error before quit.
- 	//timeout one second or when client acknowledge we can stop.
+	serv.listen(port);
+	return serv;
+}
+
+Screen.prototype.readStreams = function () {
+	var self = this;
+
+	this.rl.on('line', function(line){
+	 	self.socket.emit('line', {data: line, stream: 'std'});
+	})
+}
+
+Screen.prototype.receiveSocket = function () {
+	this.socket.on('connection', function (socket) {
+		socket.on('closed', function (data) {
+		 	process.exit();
+	  	});
+	})
+}
+
+//timeout one second or when client acknowledge we can stop.
+Screen.prototype.closeHandler = function () {
+	this.socket.emit('close', true);
  	setTimeout(function(){
- 		socket.emit('line', err);
  		process.exit();
- 		throw err;
- 	}, 100);
+ 	}, 300);
+}
 
-});
-
-
-process.on('beforeExit', function (err) {
-  	//console.error(err);
- 	socket.emit('line', "aaaa");
-
-});
-
-// process.stdin.resume();//so the program will not close instantly
-
-// function exitHandler(options, err) {
-//     if (options.cleanup) console.log('clean');
-//     if (err) console.log(err.stack);
-//     if (options.exit) process.exit();
-// }
-
-// //do something when app is closing
-// process.on('exit', exitHandler.bind(null,{cleanup:true}));
-
-// //catches ctrl+c event
-// process.on('SIGINT', exitHandler.bind(null, {exit:true}));
-
-// //catches uncaught exceptions
-// process.on('uncaughtException', exitHandler.bind(null, {exit:true}));
-
-// rl.on("data", function(chunk) {
-//     console.log('received chunk ' + chunk);
-// });
-
-// rl.on('line', function(line){
-//     console.log(line);
-//     logStream.write(line);
-//  	 socket.emit('line', line);
-// })
-
-
-// process.stderr.on('end', function(line){
-//     console.log("It stopped");
-//     console.log(line);
-//     console.log("It stopped");
-// })
-
-// rl.on('end', function(line){
-//     console.log("It stopped");
-//     console.log(line);
-//     console.log("It stopped");
-// })
-
-
-// process.stderr.on('error', function(line){
-//     console.log("It stopped");
-//     console.log(line);
-//     console.log("It stopped");
-// })
-
-// rl.on('error', function(line){
-//     console.log("It stopped");
-//     console.log(line);
-//     console.log("It stopped");
-// })
-
-
-// rl.on('close', function(line){
-//     console.log("It stopped");
-//     console.log(line);
-//     console.log("It stopped");
-// })
-
-
-// test fuctions
-
-var interval = setInterval(function(){
-	var date = new Date();
-	rl.write('Delete me!' + date.getSeconds() + "\n");
-}, 1000)
-
-setTimeout(function() {
-	//clearInterval(interval);
-
-    throw "Some error";
-
-}, 6000)
+Screen.prototype.errorHandling = function () {
+	var self = this;
+	process.on('uncaughtException', function (err) {
+		self.rl.write(err + "\n");
+		self.closeHandler();
+	});
+}
