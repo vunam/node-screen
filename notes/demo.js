@@ -7,11 +7,11 @@ var count = 0;
 var interval = setInterval(function(){
 	var date = new Date();
     count++;
-	console.log('Delete me!' + count );
-}, 100);
+	console.log('Test!' + count );
+}, 10);
 
 setTimeout(function() {
 	//clearInterval(interval);
     throw "Some error";
 
-}, 1500);
+}, 5000);

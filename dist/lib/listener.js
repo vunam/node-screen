@@ -4,7 +4,7 @@ var fs = require('fs');
 var io = require('socket.io');
 var http = require('http');
 var readline = require('readline');
-var index = fs.readFileSync(__dirname + '/index.html');
+var index = fs.readFileSync(__dirname + '/console/index.html');
 
 module.exports = Screen;
 
@@ -39,7 +39,6 @@ Screen.prototype.initServer = function(port) {
 	    res.writeHead(200, {'Content-Type': 'text/html'});
 	    res.end(index);
 	});
-
 	serv.listen(port);
 	return serv;
 }
