@@ -1,0 +1,25 @@
+<!doctype html>
+<html>
+    <head>
+        <script src='https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.7/socket.io.min.js'></script>
+        <script>
+            var socket = io();
+
+            socket.on('line', function(data) {
+                addLine(data);
+            });
+
+            function addLine(data) {
+                var line = document.createTextNode(data),
+                    el = document.createElement('li'),
+                    terminal = document.getElementById('terminal');
+
+                el.appendChild(line);
+                terminal.appendChild(el);
+            }
+        </script>
+    </head>
+    <body>
+        <ul id='terminal'></ul>
+    </body>
+</html>
