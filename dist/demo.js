@@ -44,12 +44,8 @@
 /* 0 */
 /***/ function(module, exports) {
 
+	// Browser client?
 	"use strict";
-
-	console.log("ARRRGH");
-	throw "test";
-
-	console.log("Ugggh");
 
 /***/ }
 /******/ ]);

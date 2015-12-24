@@ -2,8 +2,9 @@ var webpack = require('webpack');
 
 module.exports = function (config) {
   config.set({
-    browsers: ['Chrome'], //PhantomJS
+    //browsers: ['PhantomJS'], //PhantomJS
     singleRun: false,
+    autoWatch: true,
     frameworks: [ 'mocha' ],
     files: [
       'tests.webpack.js'
@@ -26,17 +27,10 @@ module.exports = function (config) {
       { test: /\.js$/, exclude: /node_modules/, loaders: ['babel'] },
         ]
       },
-      resolve: {
-        modulesDirectories: [
-          'src',
-          'node_modules'
-        ],
-        extensions: ['', '.json', '.js']
+      node: {
+        readline: "empty",
+        process: "empty"
       }
-    },
-    webpackServer: {
-      noInfo: true,
-      quiet: true
     }
   });
 };

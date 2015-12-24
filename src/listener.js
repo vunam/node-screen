@@ -1,10 +1,15 @@
+var fs = require('fs');
 var readline = require('readline');
+
 var rl = readline.createInterface(process.stdin, process.stdout);
-rl.setPrompt('guess> ');
-rl.prompt();
-rl.on('line', function(line) {
-    if (line === "right") rl.close();
-    rl.prompt();
-}).on('close',function(){
-    process.exit(0);
-});
+var logStream = fs.createWriteStream('./logFile.log', {flags: 'a'});
+
+rl.on('line', function(line){
+    console.log(line);
+    logStream.write(line);
+})
+
+setInterval(function(){
+	var date = new Date();
+	rl.write('Delete me!' + date.getSeconds() + "\n");
+}, 1000)

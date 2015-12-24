@@ -1,9 +1,9 @@
 module.exports = {
   context: __dirname + "/src",
-  entry: "./demo.js",
+  entry: "./testpage.js",
 
   output: {
-    filename: "demo.js",
+    filename: "run.js",
     path: __dirname + "/dist",
   },
   module: {
@@ -11,5 +11,9 @@ module.exports = {
       { test: /\.js$/, exclude: /node_modules/, loaders: ['babel']}
 	  ]
 	},
+  node: {
+    fs: 'empty',
+    readline: "empty"
+  },
   watch: true
 }
