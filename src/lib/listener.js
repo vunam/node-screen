@@ -4,7 +4,9 @@ var fs = require('fs');
 var io = require('socket.io');
 var http = require('http');
 var readline = require('readline');
-var index = fs.readFileSync(__dirname + '/console/index.html');
+var index = fs.readFileSync(__dirname + '/../console/index.html');
+var js = fs.readFileSync(__dirname + '/../console/app.js');
+var style = fs.readFileSync(__dirname + '/../console/style.css');
 
 module.exports = Screen;
 
@@ -21,6 +23,8 @@ function Screen(port){
 	this.readStreams();
 	this.receiveSocket();
 	this.errorHandling();
+
+	console.log('Console is listening on port: localhost:' + port);
 }
 
 //Hijack console.log to send it to STDOUT
@@ -36,8 +40,18 @@ Screen.prototype.resetConsole = function() {
 
 Screen.prototype.initServer = function(port) {
 	var serv = http.createServer(function(req, res) {
-	    res.writeHead(200, {'Content-Type': 'text/html'});
-	    res.end(index);
+
+		if(req.url === '/style.css') {
+	   	res.writeHead(200, {'Content-Type': 'text/css'});
+			res.end(style);
+		} else if(req.url === '/app.js') {
+	   	res.writeHead(200, {'Content-Type': 'application/javascript'});
+			res.end(js);
+		} else {
+	   	res.writeHead(200, {'Content-Type': 'text/html'});
+	    	res.end(index);
+		}
+		
 	});
 	serv.listen(port);
 	return serv;

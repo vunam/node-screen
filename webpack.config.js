@@ -27,14 +27,15 @@ module.exports = [{
     watch: true
   },
   {
-    context: __dirname + "/src/lib",
+    context: __dirname + "/src",
     entry: './index.js',
     output: {
-      filename: "./index.js",
+      filename: "./webpack.js",
       path: __dirname + "/dist"
     },
     module: {
       loaders: [
+        { test: /demo\.js/, loader: 'file?name=[name].[ext]' },
         { test: /listener\.js/, loader: 'file?name=lib/[name].[ext]' },
       ]
     }

@@ -44,13 +44,37 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(1);
+	// Module dependencies
+
+	__webpack_require__(1);
+	__webpack_require__(2);
+
+
+	// var screen = screen();
+	// var count = 0;
+	// var interval = setInterval(function(){
+	// 	var date = new Date();
+	//     count++;
+	// 	console.log('Test!' + count );
+	// }, 10);
+
+	// setTimeout(function() {
+	// 	//clearInterval(interval);
+	//     throw "Some error";
+
+	// }, 5000);
 
 /***/ },
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__.p + "lib/listener.js";
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__.p + "demo.js";
 
 /***/ }
 /******/ ]);
