@@ -1,20 +1,14 @@
 {
   "name": "node-screen",
-  "version": "1.0.0",
-  "description": "",
+  "version": "0.0.1",
+  "description": "Mirroring the console screen of a node application to the browser/device.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Vu Nam Nguyen <vu@strangelab.co.uk> (http://www.strangelab.co.uk)",
   "license": "MIT",
   "devDependencies": {
-    "autoprefixer-loader": "^3.1.0",
-    "babel-core": "^6.3.15",
-    "babel-loader": "^6.2.0",
-    "babel-preset-es2015": "^6.3.13",
-    "babel-preset-react": "^6.3.13",
-    "babel-preset-stage-0": "^6.3.13",
     "chai": "^3.4.1",
     "css-loader": "^0.23.1",
     "extract-text-webpack-plugin": "^0.9.1",
@@ -33,9 +27,11 @@
     "phantomjs": "^1.9.19",
     "raw-loader": "^0.5.1",
     "style-loader": "^0.13.0",
-    "webpack": "^1.12.9"
+    "webpack": "^1.12.9",
+    "webpack-dev-server": "^1.14.0"
   },
   "dependencies": {
-    "webpack-dev-server": "^1.14.0"
+    "ansi-to-html": "^0.3.0",
+    "socket.io": "^1.3.7"
   }
 }

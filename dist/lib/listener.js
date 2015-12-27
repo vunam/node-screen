@@ -4,9 +4,13 @@ var fs = require('fs');
 var io = require('socket.io');
 var http = require('http');
 var readline = require('readline');
+var Convert = require('ansi-to-html');
+
 var index = fs.readFileSync(__dirname + '/../console/index.html');
 var js = fs.readFileSync(__dirname + '/../console/app.js');
 var style = fs.readFileSync(__dirname + '/../console/style.css');
+var convert = new Convert();
+
 
 module.exports = Screen;
 
@@ -51,7 +55,7 @@ Screen.prototype.initServer = function(port) {
 	   	res.writeHead(200, {'Content-Type': 'text/html'});
 	    	res.end(index);
 		}
-		
+
 	});
 	serv.listen(port);
 	return serv;
@@ -61,7 +65,7 @@ Screen.prototype.readStreams = function () {
 	var self = this;
 
 	this.rl.on('line', function(line){
-	 	self.socket.emit('line', {data: line, stream: 'std'});
+	 	self.socket.emit('line', {data: convert.toHtml(line), stream: 'std'});
 	})
 }
 

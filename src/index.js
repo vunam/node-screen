@@ -1,7 +1,6 @@
 // Module dependencies
 
 require('./lib/listener.js');
-require('./demo.js');
 
 
 // var screen = screen();
