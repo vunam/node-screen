@@ -17,7 +17,7 @@ function addLine(data) {
         el = document.createElement('li'),
         terminal = document.getElementById('terminal');
 
-    el.appendChild(line);
+    el.innerHTML = line;
     terminal.appendChild(el);
     window.scrollTo(0,document.body.scrollHeight);
 }
