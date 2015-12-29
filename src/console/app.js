@@ -3,13 +3,11 @@ var io = require('socket.io-client');
 var socket = io();
 
 socket.on('line', function(data) {
-	console.log(data)
     addLine(data);
 });
 
 socket.on('close', function(callback) {
    socket.emit('closed', callback);
-   console.log("closing");
 });
 
 function addLine(data) {
@@ -17,7 +15,7 @@ function addLine(data) {
         el = document.createElement('li'),
         terminal = document.getElementById('terminal');
 
-    el.innerHTML = line;
+    el.innerHTML = line.textContent;
     terminal.appendChild(el);
     window.scrollTo(0,document.body.scrollHeight);
 }
